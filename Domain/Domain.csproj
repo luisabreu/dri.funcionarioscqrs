@@ -84,10 +84,26 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Agregados\Agregado.cs" />
+    <Compile Include="Agregados\Entidades\TipoFuncionario.cs" />
+    <Compile Include="Agregados\Funcionario.cs" />
+    <Compile Include="Comandos\CriaFuncionario.cs" />
     <Compile Include="Mensagens\IComando.cs" />
     <Compile Include="Mensagens\IEvento.cs" />
     <Compile Include="Mensagens\IMensagem.cs" />
+    <Compile Include="Msg.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Msg.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VO\Contacto.cs" />
+    <Compile Include="VO\TipoContacto.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Msg.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Msg.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
