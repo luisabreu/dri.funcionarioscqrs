@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Domain.Agregados;
 using Domain.Mensagens;
 using Domain.Mensagens.Comandos;
+using Domain.Mensagens.Eventos;
 using Domain.Repositorios;
 using FluentAssertions;
 using Moq;

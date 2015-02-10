@@ -15,7 +15,10 @@ namespace Domain.Repositorios {
         }
 
         public async Task Grava(Funcionario funcionario, int versaoEsperada) {
-            await _depositoEventos.GravaEventos(funcionario.Id.ToString(), funcionario.GetType().Name.ToLower(), funcionario.ObtemEventosNaoPersistidos(), versaoEsperada);
+            await _depositoEventos.GravaEventos(funcionario.Id.ToString(), 
+                funcionario.GetType().Name.ToLower(), 
+                funcionario.ObtemEventosNaoPersistidos(), 
+                versaoEsperada);
         }
 
         public async Task<Funcionario> Obtem(Guid id) {

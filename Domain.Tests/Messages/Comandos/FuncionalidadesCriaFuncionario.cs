@@ -5,7 +5,7 @@ using Domain.VO;
 using FluentAssertions;
 using Xbehave;
 
-namespace Domain.Tests.Comandos {
+namespace Domain.Tests.Messages.Comandos {
     public class FuncionalidadesCriaFuncionario {
         [Scenario]
         public void Cenario_criacao(string nome, string nif, int tipoFuncionario, IEnumerable<Contacto> contactos, CriaFuncionario comando) {

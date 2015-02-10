@@ -1,46 +1,41 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
-using System.Linq;
-using Domain.VO;
 
-namespace Domain.Mensagens {
-    public class FuncionarioCriado : IEvento {
-        public readonly IEnumerable<Contacto> Contactos;
+namespace Domain.Mensagens.Eventos {
+    public class DadosGeraisFuncionarioModificados : IEvento {
         public readonly int IdTipoFuncionario;
         public readonly string Nif;
         public readonly string Nome;
 
-        public FuncionarioCriado(Guid idFuncionario,
-            string nome,
+        public DadosGeraisFuncionarioModificados(Guid id,
             string nif,
-            int idTipoFuncionario,
-            IEnumerable<Contacto> contactos = null) {
-            Contract.Requires(idFuncionario != null);
+            string nome,
+            int idTipoFuncionario) {
+            Contract.Requires(id != Guid.Empty);
             Contract.Requires(!string.IsNullOrEmpty(nome));
             Contract.Requires(!string.IsNullOrEmpty(nif));
+            Contract.Requires(idTipoFuncionario > 0);
+            Contract.Ensures(Id != Guid.Empty);
             Contract.Ensures(!string.IsNullOrEmpty(Nome));
-            Contract.Ensures(Contactos != null);
             Contract.Ensures(!string.IsNullOrEmpty(Nif));
-            Id = idFuncionario;
-            Nome = nome;
-            Nif = nif;
+            Contract.Ensures(IdTipoFuncionario > 0);
+            Id = id;
             IdTipoFuncionario = idTipoFuncionario;
-            Contactos = contactos ?? Enumerable.Empty<Contacto>();
+            Nif = nif;
+            Nome = nome;
         }
 
         public Guid Id { get; private set; }
         public int Versao { get; set; }
 
         [ContractInvariantMethod]
-        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Required for code contracts.")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic",
+            Justification = "Required for code contracts.")]
         private void ObjectInvariant() {
             Contract.Invariant(Id != Guid.Empty);
             Contract.Invariant(!string.IsNullOrEmpty(Nome));
             Contract.Invariant(!string.IsNullOrEmpty(Nif));
             Contract.Invariant(IdTipoFuncionario > 0);
-            Contract.Invariant(Contactos != null);
         }
     }
 }

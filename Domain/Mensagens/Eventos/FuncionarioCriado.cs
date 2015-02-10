@@ -5,36 +5,33 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using Domain.VO;
 
-namespace Domain.Mensagens.Comandos {
-    public class CriaFuncionario : IComando {
+namespace Domain.Mensagens.Eventos {
+    public class FuncionarioCriado : IEvento {
         public readonly IEnumerable<Contacto> Contactos;
         public readonly int IdTipoFuncionario;
         public readonly string Nif;
         public readonly string Nome;
 
-        public CriaFuncionario(Guid id,
+        public FuncionarioCriado(Guid idFuncionario,
             string nome,
             string nif,
             int idTipoFuncionario,
             IEnumerable<Contacto> contactos = null) {
+            Contract.Requires(idFuncionario != null);
             Contract.Requires(!string.IsNullOrEmpty(nome));
             Contract.Requires(!string.IsNullOrEmpty(nif));
             Contract.Ensures(!string.IsNullOrEmpty(Nome));
             Contract.Ensures(Contactos != null);
             Contract.Ensures(!string.IsNullOrEmpty(Nif));
-            if (!VerificadorNif.NifValido(nif)) {
-                throw new ArgumentException(Msg.Nif_invalido);
-            }
-            Id = id;
-            Versao = 0;
+            Id = idFuncionario;
             Nome = nome;
             Nif = nif;
-            Contactos = contactos ?? Enumerable.Empty<Contacto>();
             IdTipoFuncionario = idTipoFuncionario;
+            Contactos = contactos ?? Enumerable.Empty<Contacto>();
         }
 
         public Guid Id { get; private set; }
-        public int Versao { get; private set; }
+        public int Versao { get; set; }
 
         [ContractInvariantMethod]
         [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Required for code contracts.")]
