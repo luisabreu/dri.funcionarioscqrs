@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Domain.Comandos;
+using Domain.Mensagens.Comandos;
 using Domain.VO;
 using FluentAssertions;
 using Xbehave;

@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.Contracts;
 using System.Threading.Tasks;
-using Domain.Comandos;
+using Domain.Mensagens.Comandos;
 
 namespace Domain.Handlers {
     [ContractClass(typeof (ContratoTrataMensagensFuncionario))]

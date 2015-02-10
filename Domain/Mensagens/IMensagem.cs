@@ -2,6 +2,6 @@
 
 namespace Domain.Eventos {
     public interface IMensagem {
-        Guid IdAgregado { get; }
+        Guid Id { get; }
     }
 }

@@ -6,13 +6,13 @@ using Domain.Agregados;
 namespace Domain.Repositorios {
     [ContractClass(typeof (ContratoRepositorioFuncionarios))]
     public interface IRepositorioFuncionarios {
-        Task Grava(Funcionario funcionario);
+        Task Grava(Funcionario funcionario, int versaoEsperada);
         Task<Funcionario> Obtem(Guid id);
     }
 
     [ContractClassFor(typeof (IRepositorioFuncionarios))]
     internal abstract class ContratoRepositorioFuncionarios : IRepositorioFuncionarios {
-        public Task Grava(Funcionario funcionario) {
+        public Task Grava(Funcionario funcionario, int versaoEsperada) {
             Contract.Requires(funcionario != null);
             return default(Task);
         }

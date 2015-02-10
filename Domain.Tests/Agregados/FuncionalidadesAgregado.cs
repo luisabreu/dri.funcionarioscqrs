@@ -53,7 +53,7 @@ namespace Domain.Tests.Agregados {
         }
 
         public class EventoDemo:IEvento{
-            public Guid IdAgregado { get; private set; }
+            public Guid Id { get; private set; }
 
             public int Versao { get; set; }
         }

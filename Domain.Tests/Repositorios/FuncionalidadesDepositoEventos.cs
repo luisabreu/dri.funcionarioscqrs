@@ -51,8 +51,8 @@ namespace Domain.Tests.Repositorios {
 
                 Assert.Equal(3, lidos.Count());
 
-                var idsEventos = eventos.Select(e => e.IdAgregado).ToList();
-                Assert.True(idsEventos.All(id => lidos.Exists(l => l.IdAgregado == id)));
+                var idsEventos = eventos.Select(e => e.Id).ToList();
+                Assert.True(idsEventos.All(id => lidos.Exists(l => l.Id == id)));
                 Assert.True(new[] {0, 1, 2}.All(versao => lidos.Exists(l => l.Versao == versao)));
                 await ligacao.DeleteStreamAsync(stream.ToString(), ExpectedVersion.Any);
             }
@@ -89,8 +89,8 @@ namespace Domain.Tests.Repositorios {
 
                 Assert.Equal(3, eventosObtidos.Count());
 
-                var idsEventos = eventos.Select(e => e.IdAgregado).ToList();
-                Assert.True(idsEventos.All(id => eventosObtidos.Exists(l => l.IdAgregado == id)));
+                var idsEventos = eventos.Select(e => e.Id).ToList();
+                Assert.True(idsEventos.All(id => eventosObtidos.Exists(l => l.Id == id)));
                 Assert.True(new[] {0, 1, 2}.All(versao => eventosObtidos.Exists(l => l.Versao == versao)));
 
             }
@@ -135,8 +135,8 @@ namespace Domain.Tests.Repositorios {
 
                 Assert.Equal(5, eventosObtidos.Count());
 
-                var idsEventos = eventos.Select(e => e.IdAgregado).ToList();
-                Assert.True(idsEventos.All(id => eventosObtidos.Exists(l => l.IdAgregado == id)));
+                var idsEventos = eventos.Select(e => e.Id).ToList();
+                Assert.True(idsEventos.All(id => eventosObtidos.Exists(l => l.Id == id)));
                 Assert.True(new[] {0, 1, 2, 3, 4}.All(versao => eventosObtidos.Exists(l => l.Versao == versao)));
                 await ligacao.DeleteStreamAsync(stream.ToString(), ExpectedVersion.Any);
             }
@@ -157,12 +157,12 @@ namespace Domain.Tests.Repositorios {
         }
 
         private class EventoTeste : IEvento {
-            public EventoTeste(Guid idAgregado, int versao) {
-                IdAgregado = idAgregado;
+            public EventoTeste(Guid id, int versao) {
+                Id = id;
                 Versao = versao;
             }
 
-            public Guid IdAgregado { get; private set; }
+            public Guid Id { get; private set; }
             public int Versao { get; set; }
         }
     }
