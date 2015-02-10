@@ -2,6 +2,6 @@
 
 namespace Domain.Mensagens {
     public interface IEvento : IMensagem {
-        int Versao { get; }
+        int Versao { get; set; }
     }
 }

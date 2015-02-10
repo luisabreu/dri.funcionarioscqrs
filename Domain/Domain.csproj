@@ -11,7 +11,7 @@
     <AssemblyName>Domain</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <CodeContractsAssemblyMode>0</CodeContractsAssemblyMode>
+    <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -74,6 +74,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EventStore.ClientAPI">
+      <HintPath>..\packages\EventStore.Client.3.0.1\lib\net40\EventStore.ClientAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -87,6 +94,10 @@
     <Compile Include="Agregados\Entidades\TipoFuncionario.cs" />
     <Compile Include="Agregados\Funcionario.cs" />
     <Compile Include="Comandos\CriaFuncionario.cs" />
+    <Compile Include="Repositorios\ConcurrencyException.cs" />
+    <Compile Include="Repositorios\DepositoEventos.cs" />
+    <Compile Include="Repositorios\IDepositoEventos.cs" />
+    <Compile Include="Handlers\ITrataMensagensFuncionario.cs" />
     <Compile Include="Mensagens\IComando.cs" />
     <Compile Include="Mensagens\IEvento.cs" />
     <Compile Include="Mensagens\IMensagem.cs" />
@@ -96,6 +107,11 @@
       <DependentUpon>Msg.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositorios\IRepositorioFuncionarios.cs" />
+    <Compile Include="Repositorios\ISeriadorEventos.cs" />
+    <Compile Include="Repositorios\SeriadorEventos.cs" />
+    <Compile Include="Servicos\IServicoDuplicacaoNif.cs" />
+    <Compile Include="Servicos\ServicoDuplicacaoNif.cs" />
     <Compile Include="VO\Contacto.cs" />
     <Compile Include="VO\TipoContacto.cs" />
   </ItemGroup>
@@ -104,6 +120,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Msg.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

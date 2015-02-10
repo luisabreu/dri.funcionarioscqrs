@@ -68,5 +68,14 @@ namespace Domain {
                 return ResourceManager.GetString("Contacto_incorreto", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O NIF introduzido não é válido..
+        /// </summary>
+        internal static string Nif_invalido {
+            get {
+                return ResourceManager.GetString("Nif_invalido", resourceCulture);
+            }
+        }
     }
 }
