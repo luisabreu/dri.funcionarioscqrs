@@ -43,7 +43,7 @@ namespace Domain.Tests.Repositorios {
                                                     new EventoTeste(stream, 0)
                                                 };
                 await ligacao.ConnectAsync();
-                deposito.GravaEventos(stream.ToString(), _tipoAgregado, eventos, ExpectedVersion.NoStream).Wait();
+                await deposito.GravaEventos(stream.ToString(), _tipoAgregado, eventos, ExpectedVersion.NoStream);
                 var slice = await ligacao.ReadStreamEventsForwardAsync(stream.ToString(), StreamPosition.Start, eventos.Count(), false);
                 var lidos = slice.Events
                     .Select(DeseriaEvento)
@@ -54,9 +54,7 @@ namespace Domain.Tests.Repositorios {
                 var idsEventos = eventos.Select(e => e.IdAgregado).ToList();
                 Assert.True(idsEventos.All(id => lidos.Exists(l => l.IdAgregado == id)));
                 Assert.True(new[] {0, 1, 2}.All(versao => lidos.Exists(l => l.Versao == versao)));
-            }
-            catch (Exception ex) {
-                var t = ex;
+                await ligacao.DeleteStreamAsync(stream.ToString(), ExpectedVersion.Any);
             }
             finally {
                 ligacao.Close();
@@ -87,16 +85,17 @@ namespace Domain.Tests.Repositorios {
                         SeriaEvento(eventoGravar),
                         null)));
 
-                var eventosObtidos = deposito.ObtemEventosParaAgregado(stream.ToString()).Result.ToList();
+                var eventosObtidos = (await deposito.ObtemEventosParaAgregado(stream.ToString())).ToList();
 
                 Assert.Equal(3, eventosObtidos.Count());
 
                 var idsEventos = eventos.Select(e => e.IdAgregado).ToList();
                 Assert.True(idsEventos.All(id => eventosObtidos.Exists(l => l.IdAgregado == id)));
                 Assert.True(new[] {0, 1, 2}.All(versao => eventosObtidos.Exists(l => l.Versao == versao)));
+
             }
             finally {
-                ligacao.DeleteStreamAsync(stream.ToString(), ExpectedVersion.Any).Wait();
+                
                 ligacao.Close();
                 FechaEventStore();
             }
@@ -130,7 +129,7 @@ namespace Domain.Tests.Repositorios {
                         SeriaEvento(eventoGravar),
                         null)));
 
-                deposito.GravaEventos(stream.ToString(), _tipoAgregado, novosEventos, 2).Wait();
+                await deposito.GravaEventos(stream.ToString(), _tipoAgregado, novosEventos, 2);
                 var slice = await ligacao.ReadStreamEventsForwardAsync(stream.ToString(), StreamPosition.Start, int.MaxValue, false);
                 var eventosObtidos = slice.Events.Select(DeseriaEvento).ToList();
 
@@ -139,9 +138,9 @@ namespace Domain.Tests.Repositorios {
                 var idsEventos = eventos.Select(e => e.IdAgregado).ToList();
                 Assert.True(idsEventos.All(id => eventosObtidos.Exists(l => l.IdAgregado == id)));
                 Assert.True(new[] {0, 1, 2, 3, 4}.All(versao => eventosObtidos.Exists(l => l.Versao == versao)));
+                await ligacao.DeleteStreamAsync(stream.ToString(), ExpectedVersion.Any);
             }
             finally {
-                ligacao.DeleteStreamAsync(stream.ToString(), ExpectedVersion.Any).Wait();
                 ligacao.Close();
                 FechaEventStore();
             }
