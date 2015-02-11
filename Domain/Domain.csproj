@@ -77,9 +77,18 @@
     <Reference Include="EventStore.ClientAPI">
       <HintPath>..\packages\EventStore.Client.3.0.1\lib\net40\EventStore.ClientAPI.dll</HintPath>
     </Reference>
+    <Reference Include="FluentNHibernate">
+      <HintPath>..\packages\FluentNHibernate.2.0.1.0\lib\net40\FluentNHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="Iesi.Collections">
+      <HintPath>..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate">
+      <HintPath>..\packages\NHibernate.4.0.3.4000\lib\net40\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -101,6 +110,12 @@
     <Compile Include="Mensagens\Eventos\ContactosFuncionarioModificados.cs" />
     <Compile Include="Mensagens\Eventos\DadosGeraisFuncionarioModificados.cs" />
     <Compile Include="Mensagens\Eventos\FuncionarioCriado.cs" />
+    <Compile Include="Relatorios\Funcionario.cs" />
+    <Compile Include="Relatorios\GestorRelatorios.cs" />
+    <Compile Include="Relatorios\GestorTransacoes.cs" />
+    <Compile Include="Relatorios\MapeamentoFuncionario.cs" />
+    <Compile Include="Relatorios\ResumoFuncionario.cs" />
+    <Compile Include="Relatorios\TipoFuncionario.cs" />
     <Compile Include="Repositorios\ConcurrencyException.cs" />
     <Compile Include="Repositorios\DepositoEventos.cs" />
     <Compile Include="Repositorios\IDepositoEventos.cs" />
