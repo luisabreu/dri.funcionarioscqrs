@@ -106,11 +106,29 @@ namespace Domain {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to O NIFintroduzido já foi associado a outro funcionário..
+        /// </summary>
+        internal static string Nif_duplicado {
+            get {
+                return ResourceManager.GetString("Nif_duplicado", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to O NIF introduzido não é válido..
         /// </summary>
         internal static string Nif_invalido {
             get {
                 return ResourceManager.GetString("Nif_invalido", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O tipo de funcionário indicado não é valido..
+        /// </summary>
+        internal static string Tipo_funcionario_invalido {
+            get {
+                return ResourceManager.GetString("Tipo_funcionario_invalido", resourceCulture);
             }
         }
     }

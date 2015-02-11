@@ -93,6 +93,7 @@
     <Compile Include="Agregados\Agregado.cs" />
     <Compile Include="Agregados\Entidades\TipoFuncionario.cs" />
     <Compile Include="Agregados\Funcionario.cs" />
+    <Compile Include="Handlers\TrataComandosFuncionario.cs" />
     <Compile Include="Mensagens\Comandos\CriaFuncionario.cs" />
     <Compile Include="Mensagens\Comandos\ModificaContactosFuncionario.cs" />
     <Compile Include="Mensagens\Comandos\ModificaDadosGeraisFuncionario.cs" />
@@ -115,11 +116,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositorios\IRepositorioFuncionarios.cs" />
     <Compile Include="Repositorios\IRepositorioTiposFuncionario.cs" />
+    <Compile Include="Repositorios\RepositorioTiposFuncionario.cs" />
     <Compile Include="Repositorios\ISeriadorEventos.cs" />
     <Compile Include="Repositorios\RepositorioFuncionarios.cs" />
     <Compile Include="Repositorios\SeriadorEventos.cs" />
     <Compile Include="Servicos\IServicoDuplicacaoNif.cs" />
+    <Compile Include="Servicos\IServicoVerificacaoTiposFuncionario.cs" />
     <Compile Include="Servicos\ServicoDuplicacaoNif.cs" />
+    <Compile Include="Servicos\ServicoVerificacaoTiposesFuncionario.cs" />
     <Compile Include="VO\Contacto.cs" />
     <Compile Include="VO\TipoContacto.cs" />
   </ItemGroup>
