@@ -29,8 +29,8 @@ namespace Domain.Agregados {
             if (comando.Id != _id) {
                 throw new InvalidOperationException(Msg.Comando_incorreto_para_agregadp);
             }
-            var evento = new DadosGeraisFuncionarioModificados(comando.Id, 
-                comando.Nif, 
+            var evento = new DadosGeraisFuncionarioModificados(comando.Id,
+                comando.Nif,
                 comando.Nome,
                 comando.IdTipoFuncionario);
             AplicaEvento(evento);
@@ -38,13 +38,33 @@ namespace Domain.Agregados {
 
         public void ModificaContactos(ModificaContactosFuncionario comando) {
             Contract.Requires(comando != null);
-            
+            if (comando.Id != _id) {
+                throw new InvalidOperationException(Msg.Comando_incorreto_para_agregadp);
+            }
+            if (comando.ContactosRemover.Any(c => !_contactos.Contains(c))) {
+                throw new InvalidOperationException(Msg.Contactos_eliminar_nao_existem);
+            }
+            if (comando.ContactosAdicionar.Any(c => _contactos.Contains(c))) {
+                throw new InvalidOperationException(Msg.Contactos_adicionar_existem);
+            }
+            var evento = new ContactosFuncionarioModificados(comando.Id, comando.ContactosAdicionar, comando.ContactosRemover);
+            AplicaEvento(evento);
         }
 
         private void Aplica(FuncionarioCriado evento) {
             Contract.Requires(evento != null);
             _id = evento.Id;
             _contactos = evento.Contactos.ToList();
+        }
+
+        private void Aplica(ContactosFuncionarioModificados evento) {
+            Contract.Requires(evento != null);
+            foreach (var contacto in evento.ContactosRemover) {
+                _contactos.Remove(contacto);
+            }
+            foreach (var contacto in evento.ContactosAdicionar) {
+                _contactos.Add(contacto);
+            }
         }
 
         private void Aplica(DadosGeraisFuncionarioModificados evento) {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
+using System.Linq;
 using Domain.VO;
 
 namespace Domain.Mensagens.Eventos {
@@ -14,9 +15,11 @@ namespace Domain.Mensagens.Eventos {
             IEnumerable<Contacto> contactosRemover = null) {
             Contract.Requires(id != Guid.Empty);
             Contract.Ensures(id != Guid.Empty);
-            Contract.Ensures(contactosAdicionar != null);
-            Contract.Ensures(contactosRemover != null);
+            Contract.Ensures(ContactosAdicionar != null);
+            Contract.Ensures(ContactosRemover != null);
             Id = id;
+            ContactosAdicionar = contactosAdicionar ?? Enumerable.Empty<Contacto>();
+            ContactosRemover   = contactosRemover ?? Enumerable.Empty<Contacto>();
         }
 
         public Guid Id { get; private set; }
@@ -26,7 +29,6 @@ namespace Domain.Mensagens.Eventos {
         [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Required for code contracts.")]
         private void ObjectInvariant() {
             Contract.Invariant(Id != Guid.Empty);
-            Contract.Invariant(Versao > 0);
             Contract.Invariant(ContactosAdicionar != null);
             Contract.Invariant(ContactosRemover != null);
         }

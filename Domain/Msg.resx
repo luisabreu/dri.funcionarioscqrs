@@ -129,4 +129,10 @@
   <data name="Nif_invalido" xml:space="preserve">
     <value>O NIF introduzido não é válido.</value>
   </data>
+  <data name="Contactos_eliminar_nao_existem" xml:space="preserve">
+    <value>Alguns dos contactos a eliminar não existem.</value>
+  </data>
+  <data name="Contactos_adicionar_existem" xml:space="preserve">
+    <value>Alguns dos contactos a adicionar já foram associados ao funcionário.</value>
+  </data>
 </root>

@@ -79,6 +79,24 @@ namespace Domain {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Alguns dos contactos a adicionar já foram associados ao funcionário..
+        /// </summary>
+        internal static string Contactos_adicionar_existem {
+            get {
+                return ResourceManager.GetString("Contactos_adicionar_existem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Alguns dos contactos a eliminar não existem..
+        /// </summary>
+        internal static string Contactos_eliminar_nao_existem {
+            get {
+                return ResourceManager.GetString("Contactos_eliminar_nao_existem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A coleção de contactos a remover não pode intercetar a coleção de contactos a adicionar..
         /// </summary>
         internal static string Contactos_intercetados {
