@@ -120,6 +120,9 @@
   <data name="Comando_incorreto_para_agregadp" xml:space="preserve">
     <value>O comando não pode ser aplicado a este funcionário.</value>
   </data>
+  <data name="Contactos_intercetados" xml:space="preserve">
+    <value>A coleção de contactos a remover não pode intercetar a coleção de contactos a adicionar.</value>
+  </data>
   <data name="Contacto_incorreto" xml:space="preserve">
     <value>O contacto introduzido não é válido.</value>
   </data>

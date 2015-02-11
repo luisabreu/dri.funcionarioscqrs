@@ -15,6 +15,31 @@ namespace Domain.VO {
             Valor = valor;
         }
 
+        protected bool Equals(Contacto other) {
+            return TipoContacto == other.TipoContacto && string.Equals(Valor, other.Valor);
+        }
+
+        public override bool Equals(object obj) {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((Contacto) obj);
+        }
+
+        public override int GetHashCode() {
+            unchecked {
+                return ((int) TipoContacto*397) ^ (Valor != null ? Valor.GetHashCode() : 0);
+            }
+        }
+
+        public static bool operator ==(Contacto left, Contacto right) {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(Contacto left, Contacto right) {
+            return !Equals(left, right);
+        }
+
         public TipoContacto TipoContacto { get; private set; }
         public String Valor { get; private set; }
 

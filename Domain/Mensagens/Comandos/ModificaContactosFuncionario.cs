@@ -19,8 +19,11 @@ namespace Domain.Mensagens.Comandos {
             Contract.Requires(contactosAdicionar != null || contactosRemover != null);
             Contract.Ensures(id != Guid.Empty);
             Contract.Ensures(versao > 0);
-            Contract.Ensures(contactosAdicionar != null);
-            Contract.Ensures(contactosRemover != null);
+            Contract.Ensures(ContactosAdicionar != null);
+            Contract.Ensures(ContactosRemover != null);
+            if (contactosAdicionar != null && contactosRemover != null && contactosAdicionar.Any(c => contactosRemover.Contains(c))) {
+                throw new ArgumentException(Msg.Contactos_intercetados);
+            }
             Id = id;
             Versao = versao;
             ContactosAdicionar = contactosAdicionar ?? Enumerable.Empty<Contacto>();

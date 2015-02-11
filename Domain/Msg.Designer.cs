@@ -79,6 +79,15 @@ namespace Domain {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A coleção de contactos a remover não pode intercetar a coleção de contactos a adicionar..
+        /// </summary>
+        internal static string Contactos_intercetados {
+            get {
+                return ResourceManager.GetString("Contactos_intercetados", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to O NIF introduzido não é válido..
         /// </summary>
         internal static string Nif_invalido {

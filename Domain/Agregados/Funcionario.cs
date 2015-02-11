@@ -36,6 +36,11 @@ namespace Domain.Agregados {
             AplicaEvento(evento);
         }
 
+        public void ModificaContactos(ModificaContactosFuncionario comando) {
+            Contract.Requires(comando != null);
+            
+        }
+
         private void Aplica(FuncionarioCriado evento) {
             Contract.Requires(evento != null);
             _id = evento.Id;
