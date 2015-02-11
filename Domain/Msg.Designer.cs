@@ -61,6 +61,15 @@ namespace Domain {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to O comando não pode ser aplicado a este funcionário..
+        /// </summary>
+        internal static string Comando_incorreto_para_agregadp {
+            get {
+                return ResourceManager.GetString("Comando_incorreto_para_agregadp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to O contacto introduzido não é válido..
         /// </summary>
         internal static string Contacto_incorreto {

@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Comando_incorreto_para_agregadp" xml:space="preserve">
+    <value>O comando não pode ser aplicado a este funcionário.</value>
+  </data>
   <data name="Contacto_incorreto" xml:space="preserve">
     <value>O contacto introduzido não é válido.</value>
   </data>

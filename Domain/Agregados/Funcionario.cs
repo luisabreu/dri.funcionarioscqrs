@@ -24,8 +24,11 @@ namespace Domain.Agregados {
             get { return _id; }
         }
 
-        public void Executa(ModificaDadosGeraisFuncionario comando) {
+        public void ModificaDadosGerais(ModificaDadosGeraisFuncionario comando) {
             Contract.Requires(comando != null);
+            if (comando.Id != _id) {
+                throw new InvalidOperationException(Msg.Comando_incorreto_para_agregadp);
+            }
             var evento = new DadosGeraisFuncionarioModificados(comando.Id, 
                 comando.Nif, 
                 comando.Nome,

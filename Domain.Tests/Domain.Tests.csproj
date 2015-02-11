@@ -71,6 +71,7 @@
     <Compile Include="Agregados\FuncionalidadesAgregado.cs" />
     <Compile Include="Agregados\FuncionalidadesFuncionario.cs" />
     <Compile Include="Messages\Comandos\FuncionalidadesCriaFuncionario.cs" />
+    <Compile Include="Messages\Comandos\FuncionalidadesModificaContactosFuncionario.cs" />
     <Compile Include="Messages\Comandos\FuncionalidadesModificaDadosGeraisFuncionario.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositorios\FuncionalidadesDepositoEventos.cs" />

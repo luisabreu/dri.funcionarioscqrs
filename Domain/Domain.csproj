@@ -94,8 +94,10 @@
     <Compile Include="Agregados\Entidades\TipoFuncionario.cs" />
     <Compile Include="Agregados\Funcionario.cs" />
     <Compile Include="Mensagens\Comandos\CriaFuncionario.cs" />
+    <Compile Include="Mensagens\Comandos\ModificaContactosFuncionario.cs" />
     <Compile Include="Mensagens\Comandos\ModificaDadosGeraisFuncionario.cs" />
     <Compile Include="Mensagens\Comandos\VerificadorNif.cs" />
+    <Compile Include="Mensagens\Eventos\ContactosFuncionarioModificados.cs" />
     <Compile Include="Mensagens\Eventos\DadosGeraisFuncionarioModificados.cs" />
     <Compile Include="Mensagens\Eventos\FuncionarioCriado.cs" />
     <Compile Include="Repositorios\ConcurrencyException.cs" />
