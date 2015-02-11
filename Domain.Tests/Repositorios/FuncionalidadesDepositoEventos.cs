@@ -14,27 +14,26 @@ using Xunit;
 namespace Domain.Tests.Repositorios {
     public class FuncionalidadesDepositoEventos {
         private const string _eventStorePath = @"E:\tools\EventStore\eventstore.clusternode.exe";
-        private const string _args = @"--mem-db=true --ext-tcp-port=1120 --ext-http-port=2120";
+        private const string _args = @"--mem-db=true --ext-tcp-port={0} --ext-http-port={1}";
         private const string _tipoAgregado = "testes";
-        private static readonly IPEndPoint _integrationTestTcpEndPoint = new IPEndPoint(IPAddress.Loopback, 1120);
         private static JsonSerializerSettings _definicoesJson = new JsonSerializerSettings {TypeNameHandling = TypeNameHandling.Objects};
-        private Process _process;
 
-        private void IniciaEventStore() {
-            _process = Process.Start(_eventStorePath, _args);
+        private Process IniciaEventStore(string tcpPort, string httpPort) {
+            return Process.Start(_eventStorePath, string.Format(_args, tcpPort, httpPort));
         }
 
-        private void FechaEventStore() {
-            _process.Kill();
+        private void FechaEventStore(Process process) {
+            process.Kill();
         }
 
         [Fact]
         public async Task Guarda_eventos_novo_agregado() {
             IEventStoreConnection ligacao = null;
             var stream = Guid.NewGuid();
+            Process listener = null;
             try {
-                IniciaEventStore();
-                ligacao = EventStoreConnection.Create(_integrationTestTcpEndPoint);
+                listener = IniciaEventStore("1120", "2120");
+                ligacao = EventStoreConnection.Create( new IPEndPoint(IPAddress.Loopback, 1120));
                 var deposito = new DepositoEventos(ligacao, new SeriadorEventos());
 
                 var eventos = new List<IEvento> {
@@ -58,7 +57,9 @@ namespace Domain.Tests.Repositorios {
             }
             finally {
                 ligacao.Close();
-                FechaEventStore();
+                if (listener != null) {
+                    FechaEventStore(listener);
+                }
             }
         }
 
@@ -66,9 +67,10 @@ namespace Domain.Tests.Repositorios {
         public async Task Carrega_eventos_agregado() {
             IEventStoreConnection ligacao = null;
             var stream = Guid.NewGuid();
+            Process listener = null;
             try {
-                IniciaEventStore();
-                ligacao = EventStoreConnection.Create(_integrationTestTcpEndPoint);
+                listener = IniciaEventStore("1121", "2121");
+                ligacao = EventStoreConnection.Create( new IPEndPoint(IPAddress.Loopback, 1121));
                 var deposito = new DepositoEventos(ligacao, new SeriadorEventos());
 
                 var eventos = new List<IEvento> {
@@ -97,7 +99,9 @@ namespace Domain.Tests.Repositorios {
             finally {
                 
                 ligacao.Close();
-                FechaEventStore();
+                if (listener != null) {
+                    FechaEventStore(listener);
+                }
             }
         }
 
@@ -105,9 +109,10 @@ namespace Domain.Tests.Repositorios {
         public async Task Adiciona_eventos_agregado() {
             IEventStoreConnection ligacao = null;
             var stream = Guid.NewGuid();
+            Process listener = null;
             try {
-                IniciaEventStore();
-                ligacao = EventStoreConnection.Create(_integrationTestTcpEndPoint);
+                listener = IniciaEventStore("1122", "2122");
+                ligacao = EventStoreConnection.Create( new IPEndPoint(IPAddress.Loopback, 1122));
                 var deposito = new DepositoEventos(ligacao, new SeriadorEventos());
 
                 var eventos = new List<IEvento> {
@@ -142,7 +147,9 @@ namespace Domain.Tests.Repositorios {
             }
             finally {
                 ligacao.Close();
-                FechaEventStore();
+                if (listener != null) {
+                    FechaEventStore(listener);
+                }
             }
         }
 

@@ -103,7 +103,7 @@
     <Compile Include="Repositorios\ConcurrencyException.cs" />
     <Compile Include="Repositorios\DepositoEventos.cs" />
     <Compile Include="Repositorios\IDepositoEventos.cs" />
-    <Compile Include="Handlers\ITrataMensagensFuncionario.cs" />
+    <Compile Include="Handlers\ITrataComandosFuncionario.cs" />
     <Compile Include="Mensagens\IComando.cs" />
     <Compile Include="Mensagens\IEvento.cs" />
     <Compile Include="Mensagens\IMensagem.cs" />
