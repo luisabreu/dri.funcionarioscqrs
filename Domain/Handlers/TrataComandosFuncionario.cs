@@ -2,9 +2,11 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Threading.Tasks;
+using Domain.Agregados;
 using Domain.Mensagens.Comandos;
 using Domain.Repositorios;
 using Domain.Servicos;
+using EventStore.ClientAPI;
 
 namespace Domain.Handlers {
     public class TrataComandosFuncionario : ITrataComandosFuncionario {
@@ -31,7 +33,9 @@ namespace Domain.Handlers {
             if (!_verificadorTiposFuncionario.TipoFuncionarioValido(comando.IdTipoFuncionario)) {
                 throw new InvalidOperationException(Msg.Tipo_funcionario_invalido);
             }
-            throw new NotImplementedException();
+
+            var funcionario = new Funcionario(comando);
+            return _repositorio.Grava(funcionario, ExpectedVersion.NoStream);
         }
 
         [ContractInvariantMethod]

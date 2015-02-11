@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Threading.Tasks;
+using Domain.Agregados;
 using Domain.Handlers;
 using Domain.Mensagens.Comandos;
+using Domain.Repositorios;
 using Domain.Servicos;
+using EventStore.ClientAPI;
 using FluentAssertions;
 using Moq;
 using Xbehave;
@@ -35,6 +39,9 @@ namespace Domain.Tests.Handlers {
 
             "Então devemos obter uma exceção"
                 .Then(() => excecaoEsperada.Should().NotBeNull());
+
+            "E o mock foi usado corretamente"
+                .And(() => _container.GetMock<IServicoDuplicacaoNif>().VerifyAll());
         }
         
         [Scenario]
@@ -67,6 +74,46 @@ namespace Domain.Tests.Handlers {
 
             "Então devemos obter uma exceção"
                 .Then(() => excecaoEsperada.Should().NotBeNull());
+
+            "E os mocks foram usados corretamente"
+                .And(() => {
+                         _container.GetMock<IServicoDuplicacaoNif>().VerifyAll();
+                         _container.GetMock<IServicoVerificacaoTiposFuncionario>().VerifyAll();
+                     });
+        }
+        
+        [Scenario]
+        public void Cenario_gravacao_sucesso(TrataComandosFuncionario handler, CriaFuncionario comando, Exception excecaoEsperada) {
+            "Dado uma handler"
+                .Given(() => handler = _container.Create<TrataComandosFuncionario>());
+
+            "E um comando"
+                .And(() => comando = new CriaFuncionario(Guid.NewGuid(), "Luis", "123456789", 100));
+
+            "E um verificador de NIF"
+                .And(() => _container.GetMock<IServicoDuplicacaoNif>()
+                    .Setup(v => v.NifDuplicado(comando.Nif, comando.Id))
+                    .Returns(false));
+            
+            "E um verificador de tipos de funcionário"
+                .And(() => _container.GetMock<IServicoVerificacaoTiposFuncionario>()
+                    .Setup(v => v.TipoFuncionarioValido(comando.IdTipoFuncionario))
+                    .Returns(true));
+
+            "E um repositior previamente preparado"
+                .And(() => _container.GetMock<IRepositorioFuncionarios>()
+                    .Setup(r => r.Grava(It.IsAny<Funcionario>(), ExpectedVersion.NoStream))
+                    .Returns(Task.FromResult(0)));
+
+            "Quando tratamos o comando"
+                .When(() => handler.Trata(comando) );
+
+            "Então todos os mocks foram usados corretamente"
+                .Then(() => {
+                          _container.GetMock<IServicoDuplicacaoNif>().VerifyAll();
+                          _container.GetMock<IServicoVerificacaoTiposFuncionario>().VerifyAll();
+                          _container.GetMock<IRepositorioFuncionarios>().VerifyAll();
+                      });
         }
     }
 }
