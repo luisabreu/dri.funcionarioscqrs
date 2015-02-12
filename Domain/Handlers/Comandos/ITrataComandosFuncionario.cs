@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Domain.Mensagens.Comandos;
 
-namespace Domain.Handlers {
+namespace Domain.Handlers.Comandos {
     [ContractClass(typeof (ContratoTrataComandosFuncionario))]
     public interface ITrataComandosFuncionario {
         Task Trata(CriaFuncionario comando);

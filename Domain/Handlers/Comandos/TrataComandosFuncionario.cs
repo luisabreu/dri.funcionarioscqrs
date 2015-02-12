@@ -8,7 +8,7 @@ using Domain.Repositorios;
 using Domain.Servicos;
 using EventStore.ClientAPI;
 
-namespace Domain.Handlers {
+namespace Domain.Handlers.Comandos {
     public class TrataComandosFuncionario : ITrataComandosFuncionario {
         private readonly IRepositorioFuncionarios _repositorio;
         private readonly IServicoDuplicacaoNif _verificadorNif;

@@ -25,7 +25,7 @@ namespace Domain.Relatorios {
 
         public IEnumerable<TipoFuncionario> ObtemTodosTiposFuncionarios() {
             return _repositorioTiposFuncionario.ObtemTiposFuncionario()
-                .Select(t => new TipoFuncionario {IdTipoFuncionario = t.Id, Designacao = t.Descricao})
+                .Select(t => new TipoFuncionario {IdTipoFuncionario = t.Id, Descricao = t.Descricao})
                 .ToList();
         }
 

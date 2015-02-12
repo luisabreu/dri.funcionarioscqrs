@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Domain.Agregados;
 using Domain.Handlers;
+using Domain.Handlers.Comandos;
 using Domain.Mensagens.Comandos;
 using Domain.Repositorios;
 using Domain.Servicos;

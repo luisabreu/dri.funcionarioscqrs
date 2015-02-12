@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Domain.Handlers;
+using Domain.Handlers.Comandos;
 using Domain.Mensagens.Comandos;
 using Domain.Relatorios;
 using Domain.VO;
