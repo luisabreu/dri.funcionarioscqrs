@@ -26,8 +26,8 @@ namespace Domain.Handlers {
             _verificadorTiposFuncionario = verificadorTiposFuncionario;
         }
 
-        public Task Trata(CriaFuncionario comando) {
-            if (_verificadorNif.NifDuplicado(comando.Nif, comando.Id)) {
+        public async Task Trata(CriaFuncionario comando) {
+            if (await _verificadorNif.NifDuplicado(comando.Nif, comando.Id)) {
                 throw new InvalidOperationException(Msg.Nif_duplicado);
             }
             if (!_verificadorTiposFuncionario.TipoFuncionarioValido(comando.IdTipoFuncionario)) {
@@ -35,7 +35,7 @@ namespace Domain.Handlers {
             }
 
             var funcionario = new Funcionario(comando);
-            return _repositorio.Grava(funcionario, ExpectedVersion.NoStream);
+            await _repositorio.Grava(funcionario, ExpectedVersion.NoStream);
         }
 
         [ContractInvariantMethod]

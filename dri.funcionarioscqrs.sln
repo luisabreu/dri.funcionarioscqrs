@@ -12,6 +12,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{6B60B1
 		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "site", "site\site.csproj", "{EF6F9779-4B8C-48BB-BD51-830B21056276}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "site.tests", "site.tests\site.tests.csproj", "{ADF4557C-549D-4FC5-931B-DE633929A4C8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +30,14 @@ Global
 		{F792AECF-6456-4916-8041-62C2A981B74D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F792AECF-6456-4916-8041-62C2A981B74D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F792AECF-6456-4916-8041-62C2A981B74D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF6F9779-4B8C-48BB-BD51-830B21056276}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF6F9779-4B8C-48BB-BD51-830B21056276}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF6F9779-4B8C-48BB-BD51-830B21056276}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF6F9779-4B8C-48BB-BD51-830B21056276}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADF4557C-549D-4FC5-931B-DE633929A4C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADF4557C-549D-4FC5-931B-DE633929A4C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADF4557C-549D-4FC5-931B-DE633929A4C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADF4557C-549D-4FC5-931B-DE633929A4C8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

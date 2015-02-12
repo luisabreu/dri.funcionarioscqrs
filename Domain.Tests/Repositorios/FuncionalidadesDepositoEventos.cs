@@ -14,7 +14,7 @@ using Xunit;
 namespace Domain.Tests.Repositorios {
     public class FuncionalidadesDepositoEventos {
         private const string _eventStorePath = @"E:\tools\EventStore\eventstore.clusternode.exe";
-        private const string _args = @"--mem-db=true --ext-tcp-port={0} --ext-http-port={1}";
+        private const string _args = @"--mem-db=true --ext-tcp-port={0} --ext-http-port={1} --run-projections=all";
         private const string _tipoAgregado = "testes";
         private static JsonSerializerSettings _definicoesJson = new JsonSerializerSettings {TypeNameHandling = TypeNameHandling.Objects};
 

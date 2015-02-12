@@ -1,0 +1,56 @@
+﻿@model site.Models.DadosPesquisa
+@{
+    ViewBag.Title = "Home Page";
+}
+
+@using (Html.BeginForm("pesquisa", "Funcionarios", FormMethod.Get, new {@class = "form-inline"})) {
+    <div class="row">
+        <div class="input-group">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+            @Html.TextBoxFor(m => m.NifOuNome, new {@class = "form-control", placeholder = "Pesquisa por nome ou NIF", name = "nifOuNome", autofocus = "autofocus"})
+        </div>
+    </div>
+}
+
+<div class="row">
+    @if (Model.Funcionarios.Any()) {
+        <table class="table table-hover col-xs-12">
+            <thead>
+            <tr>
+                <td class="col-xs-1"></td>
+                <td class="col-xs-5">Nome</td>
+                <td class="col-xs-4">Nif</td>
+                <td class="col-xs-2">Tipo</td>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var func in Model.Funcionarios) {
+                <tr>
+                    <td>
+                        <a href="@Url.Action("Funcionario", "Funcionarios", new {id = func.Id})">
+                            <span class="glyphicon glyphicon-pencil"></span></a>
+                    </td>
+                    <td>@func.Nif</td>
+                    <td>@func.Nome</td>
+                    <td>@func.TipoFuncionario</td>
+                </tr>
+            }
+
+            </tbody>
+        </table>
+    }
+    else {
+        if (Model.PesquisaEfetuada) {
+            <p class="text-info no-records">Não foram encontrados funcionários.</p>
+        }
+    }
+</div>
+
+@section footer {
+    @using (Html.BeginForm("funcionario", "Funcionarios")) {
+        <button class="round-button round-button-anim">
+            <img class="no" src="@Url.Content("~/Content/pencil.png")"/>
+            <img src="@Url.Content("~/Content/add.png")"/>
+        </button>
+    }
+}

@@ -1,0 +1,1 @@
+﻿EventStore.ClusterNode.exe --db funcionarios --log funcionarios-logs --run-projections=all --ext-tcp-port=1125 --ext-http-port=2125

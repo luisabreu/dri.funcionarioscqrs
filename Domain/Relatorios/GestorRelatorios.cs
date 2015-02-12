@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -7,7 +8,7 @@ using NHibernate;
 using NHibernate.Transform;
 
 namespace Domain.Relatorios {
-    internal class GestorRelatorios {
+    internal class GestorRelatorios : IGestorRelatorios {
         private static Regex _nifRegex = new Regex(@"^\d{9}$");
         private readonly IRepositorioTiposFuncionario _repositorioTiposFuncionario;
         private readonly ISession _session;
@@ -28,7 +29,7 @@ namespace Domain.Relatorios {
                 .ToList();
         }
 
-        public IEnumerable<ResumoFuncionario> Pesquis(string nifOuNome) {
+        public IEnumerable<ResumoFuncionario> Pesquisa(string nifOuNome) {
             Contract.Requires(!string.IsNullOrEmpty(nifOuNome));
             const string sql =
                 "select Id, Nome, Nif, descricao as TipoFuncionario from Funcionarios f inner join TipoFuncinario tf on f.IdTipofuncionario=tf.Id where {0} like '%:str%";
@@ -43,7 +44,7 @@ namespace Domain.Relatorios {
             return _nifRegex.IsMatch(nomeOuNif);
         }
 
-        public Funcionario Obtem(int idFuncionario) {
+        public Funcionario Obtem(Guid idFuncionario) {
             return _session.Load<Funcionario>(idFuncionario);
         }
 

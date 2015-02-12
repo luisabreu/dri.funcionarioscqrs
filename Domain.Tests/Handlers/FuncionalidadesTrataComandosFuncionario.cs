@@ -15,7 +15,7 @@ namespace Domain.Tests.Handlers {
         private readonly AutoMockContainer _container = new AutoMockContainer(new MockRepository(MockBehavior.Strict));
 
         [Scenario]
-        public void Cenario_nif_duplicado(TrataComandosFuncionario handler, CriaFuncionario comando, Exception excecaoEsperada) {
+        public async Task Cenario_nif_duplicado(TrataComandosFuncionario handler, CriaFuncionario comando, Exception excecaoEsperada) {
             "Dado uma handler"
                 .Given(() => handler = _container.Create<TrataComandosFuncionario>());
 
@@ -25,12 +25,12 @@ namespace Domain.Tests.Handlers {
             "E um verificador de NIF"
                 .And(() => _container.GetMock<IServicoDuplicacaoNif>()
                     .Setup(v => v.NifDuplicado(comando.Nif, comando.Id))
-                    .Returns(true));
+                    .Returns(Task.FromResult(true)));
 
             "Quando tratamos o comando"
-                .When(() => {
+                .When(async () => {
                           try {
-                              handler.Trata(comando);
+                              await handler.Trata(comando);
                           }
                           catch (InvalidOperationException ex) {
                               excecaoEsperada = ex;
@@ -45,7 +45,7 @@ namespace Domain.Tests.Handlers {
         }
         
         [Scenario]
-        public void Cenario_tipo_funcionario_inexistente(TrataComandosFuncionario handler, CriaFuncionario comando, Exception excecaoEsperada) {
+        public async Task Cenario_tipo_funcionario_inexistente(TrataComandosFuncionario handler, CriaFuncionario comando, Exception excecaoEsperada) {
             "Dado uma handler"
                 .Given(() => handler = _container.Create<TrataComandosFuncionario>());
 
@@ -55,7 +55,7 @@ namespace Domain.Tests.Handlers {
             "E um verificador de NIF"
                 .And(() => _container.GetMock<IServicoDuplicacaoNif>()
                     .Setup(v => v.NifDuplicado(comando.Nif, comando.Id))
-                    .Returns(false));
+                    .Returns(Task.FromResult(false)));
             
             "E um verificador de tipos de funcionário"
                 .And(() => _container.GetMock<IServicoVerificacaoTiposFuncionario>()
@@ -63,9 +63,9 @@ namespace Domain.Tests.Handlers {
                     .Returns(false));
 
             "Quando tratamos o comando"
-                .When(() => {
+                .When(async () => {
                           try {
-                              handler.Trata(comando);
+                              await handler.Trata(comando);
                           }
                           catch (InvalidOperationException ex) {
                               excecaoEsperada = ex;
@@ -83,7 +83,7 @@ namespace Domain.Tests.Handlers {
         }
         
         [Scenario]
-        public void Cenario_gravacao_sucesso(TrataComandosFuncionario handler, CriaFuncionario comando, Exception excecaoEsperada) {
+        public async Task Cenario_gravacao_sucesso(TrataComandosFuncionario handler, CriaFuncionario comando, Exception excecaoEsperada) {
             "Dado uma handler"
                 .Given(() => handler = _container.Create<TrataComandosFuncionario>());
 
@@ -93,7 +93,7 @@ namespace Domain.Tests.Handlers {
             "E um verificador de NIF"
                 .And(() => _container.GetMock<IServicoDuplicacaoNif>()
                     .Setup(v => v.NifDuplicado(comando.Nif, comando.Id))
-                    .Returns(false));
+                    .Returns(Task.FromResult(false)));
             
             "E um verificador de tipos de funcionário"
                 .And(() => _container.GetMock<IServicoVerificacaoTiposFuncionario>()
@@ -106,7 +106,7 @@ namespace Domain.Tests.Handlers {
                     .Returns(Task.FromResult(0)));
 
             "Quando tratamos o comando"
-                .When(() => handler.Trata(comando) );
+                .When(async () => await handler.Trata(comando) );
 
             "Então todos os mocks foram usados corretamente"
                 .Then(() => {
