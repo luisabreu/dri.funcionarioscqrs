@@ -47,19 +47,19 @@ namespace site.Controllers {
                 var tipos = _gestorRelatorios.ObtemTodosTiposFuncionarios();
                 var func = id.HasValue ?
                     _gestorRelatorios.Obtem(id.Value) :
-                    CriaFuncionarioDtoVazio(tipos);
+                    CriaFuncionarioDtoVazio(tipos.First());
 
 
                 return View(new DadosFormularioFuncionario {Funcionario = func, TiposFuncionario = tipos, Novo = func == null || Novo(func)});
             }
         }
 
-        private static Funcionario CriaFuncionarioDtoVazio(IEnumerable<TipoFuncionario> tipos) {
+        private static Funcionario CriaFuncionarioDtoVazio(TipoFuncionario tipoFuncionario) {
             return new Funcionario {
                                        Contactos = new List<Contacto>(),
                                        Nif = "",
                                        Nome = "",
-                                       TipoFuncionario = tipos.First()
+                                       TipoFuncionario = tipoFuncionario
                                    };
         }
 
@@ -92,68 +92,89 @@ namespace site.Controllers {
             }
 
             return View("Funcionario", new DadosFormularioFuncionario {
-                                                                          Funcionario = !criarNovoFuncionario || !novo ? ObtemFuncionarioAtualizado(id, versao + 1, nome, nif, tipoFuncionario, tipos) : CriaFuncionarioDtoVazio(tipos),
+                Funcionario = !criarNovoFuncionario || !novo ? ObtemFuncionarioComDadosGeraisAtualizados(id, versao + 1, nome, nif, tipos.First(i => i.IdTipoFuncionario == tipoFuncionario)) : CriaFuncionarioDtoVazio(tipos.First()),
                                                                           Novo = criarNovoFuncionario && novo,
                                                                           TiposFuncionario = tipos
                                                                       });
         }
 
-        private Funcionario ObtemFuncionarioAtualizado(Guid id, int versaoEsperada, string nome, string nif, int idTipoFuncionario, IEnumerable<TipoFuncionario> tipos ) {
+        private Funcionario ObtemFuncionarioComDadosGeraisAtualizados(Guid id, int versaoEsperada, string nome, string nif, TipoFuncionario tipoFuncionario) {
             var funcionario = _gestorRelatorios.Obtem(id);
             Contract.Assert(funcionario != null);
             funcionario.Nome = nome;
             funcionario.Nif = nif;
             funcionario.Versao = versaoEsperada;
-            funcionario.TipoFuncionario = tipos.First(i => i.IdTipoFuncionario == idTipoFuncionario);
+            funcionario.TipoFuncionario = tipoFuncionario;
+            funcionario.Contactos = funcionario.Contactos ?? new List<Contacto>();
+            
             return funcionario;
+        }
 
+        private Funcionario ObtemFuncionarioComContactosAtualizados(Guid id, int versaoEsperada, Contacto contactoEliminado = null, Contacto contactoAdicionado = null) {
+            var funcionario = _gestorRelatorios.Obtem(id);
+            Contract.Assert(funcionario != null);
+            funcionario.Versao = versaoEsperada;
+            if (contactoEliminado != null) {
+                if (funcionario.Contactos.Contains(contactoEliminado)) {
+                    funcionario.Contactos = funcionario.Contactos.Where(c => c != contactoEliminado).ToList();
+                }
+            }
+            if (contactoAdicionado != null) {
+                if (!funcionario.Contactos.Contains(contactoAdicionado)) {
+                    funcionario.Contactos = funcionario.Contactos.Union(new[] {contactoAdicionado});
+                }
+            }
+            return funcionario;
         }
 
         [HttpPost]
-        public ActionResult EliminaContacto(Guid id, int versao, string contacto) {
+        public async Task<ActionResult> EliminaContacto(Guid id, int versao, string contacto) {
             IEnumerable<TipoFuncionario> tipos = null;
-            MsgGravacao msg = null;
+            Contacto contactoEliminado = null;
+            var ocorreuErro = false;
             using (var tran = _session.BeginTransaction()) {
                 try {
                     tipos = _session.QueryOver<TipoFuncionario>().List<TipoFuncionario>();
-                    var ct = Contacto.Parses(contacto);
-                    Contract.Assert(ct != null, Msg.Contacto_invalido);
-                    var cmd = new ModificaContactosFuncionario(id, versao, new[] {ct}, null);
+                    contactoEliminado = Contacto.Parses(contacto);
+                    Contract.Assert(contactoEliminado != null, Msg.Contacto_invalido);
+                    var cmd = new ModificaContactosFuncionario(id, versao, new[] {contactoEliminado});
 
-                    msg = _processador.Trata(cmd);
-                    tran.Commit();
+                    await _processador.Trata(cmd);
                 }
                 catch (Exception ex) {
+                    ocorreuErro = true;
                     ModelState.AddModelError("total", ex.Message);
                 }
             }
             return View("Funcionario", new DadosFormularioFuncionario {
-                                                                          Funcionario = _session.Load<Funcionario>(id),
+                                                                          Funcionario = ObtemFuncionarioComContactosAtualizados(id, ocorreuErro ? versao :  versao + 1, ocorreuErro ? null : contactoEliminado),// _session.Load<Funcionario>(id),
                                                                           Novo = false,
                                                                           TiposFuncionario = tipos
                                                                       });
         }
 
         [HttpPost]
-        public ActionResult AdicionaContacto(Guid id, int versao, string contacto) {
+        public async Task<ActionResult> AdicionaContacto(Guid id, int versao, string contacto) {
             IEnumerable<TipoFuncionario> tipos = null;
-            MsgGravacao msg = null;
+            Contacto contactoAdicionar = null;
+            var ocorreuErro = false;
             using (var tran = _session.BeginTransaction()) {
                 try {
                     tipos = _session.QueryOver<TipoFuncionario>().List<TipoFuncionario>();
-                    var ct = Contacto.Parses(contacto);
-                    Contract.Assert(ct != null, Msg.Contacto_invalido);
-                    var cmd = new ModificaContactosFuncionario(id, versao, null, new[] {ct});
+                    contactoAdicionar = Contacto.Parses(contacto);
+                    Contract.Assert(contactoAdicionar != null, Msg.Contacto_invalido);
+                    var cmd = new ModificaContactosFuncionario(id, versao, null, new[] {contactoAdicionar});
 
-                    msg = _processador.Trata(cmd);
+                    await _processador.Trata(cmd);
                     tran.Commit();
                 }
                 catch (Exception ex) {
+                    ocorreuErro = true;
                     ModelState.AddModelError("total", ex.Message);
                 }
             }
             return View("Funcionario", new DadosFormularioFuncionario {
-                                                                          Funcionario = _session.Load<Funcionario>(id),
+                                                                         Funcionario = ObtemFuncionarioComContactosAtualizados(id, ocorreuErro ? versao : versao + 1, null, ocorreuErro ? null : contactoAdicionar),// _session.Load<Funcionario>(id),
                                                                           Novo = false,
                                                                           TiposFuncionario = tipos
                                                                       });
