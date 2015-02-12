@@ -84,18 +84,29 @@ namespace site.Controllers {
                         var comando = new CriaFuncionario(Guid.NewGuid(), nome, nif, tipo.IdTipoFuncionario);
                         await _processador.Trata(comando);
                     }
-
-                    tran.Commit();
                 }
                 catch (Exception ex) {
+                    novo = false;
                     ModelState.AddModelError("total", ex.Message);
                 }
             }
+
             return View("Funcionario", new DadosFormularioFuncionario {
-                                                                          Funcionario = !criarNovoFuncionario || !novo ? _session.Load<Funcionario>(id) : CriaFuncionarioDtoVazio(tipos),
+                                                                          Funcionario = !criarNovoFuncionario || !novo ? ObtemFuncionarioAtualizado(id, versao + 1, nome, nif, tipoFuncionario, tipos) : CriaFuncionarioDtoVazio(tipos),
                                                                           Novo = criarNovoFuncionario && novo,
                                                                           TiposFuncionario = tipos
                                                                       });
+        }
+
+        private Funcionario ObtemFuncionarioAtualizado(Guid id, int versaoEsperada, string nome, string nif, int idTipoFuncionario, IEnumerable<TipoFuncionario> tipos ) {
+            var funcionario = _gestorRelatorios.Obtem(id);
+            Contract.Assert(funcionario != null);
+            funcionario.Nome = nome;
+            funcionario.Nif = nif;
+            funcionario.Versao = versaoEsperada;
+            funcionario.TipoFuncionario = tipos.First(i => i.IdTipoFuncionario == idTipoFuncionario);
+            return funcionario;
+
         }
 
         [HttpPost]

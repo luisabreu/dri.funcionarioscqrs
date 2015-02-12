@@ -55,6 +55,16 @@ namespace Domain.Handlers {
             await _repositorio.Grava(funcionario, comando.Versao);
         }
 
+        public async Task Trata(ModificaContactosFuncionario comando) {
+            var funcionario = await _repositorio.Obtem(comando.Id);
+            if (funcionario == null) {
+                throw new InvalidOperationException(Msg.Funcionario_inexistente);
+            }
+            funcionario.ModificaContactos(comando);
+            await _repositorio.Grava(funcionario, comando.Versao);
+        }
+
+
         [ContractInvariantMethod]
         [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Required for code contracts.")]
         private void ObjectInvariant() {

@@ -8,6 +8,8 @@ namespace Domain.Handlers {
         Task Trata(CriaFuncionario comando);
 
         Task Trata(ModificaDadosGeraisFuncionario comando);
+
+        Task Trata(ModificaContactosFuncionario comando);
     }
 
     [ContractClassFor(typeof (ITrataComandosFuncionario))]
@@ -20,6 +22,11 @@ namespace Domain.Handlers {
         public Task Trata(ModificaDadosGeraisFuncionario comando) {
             Contract.Requires(comando != null);
             return default(Task);
+        }
+
+        public Task Trata(ModificaContactosFuncionario comando) {
+            Contract.Requires(comando != null);
+            return default (Task);
         }
     }
 }
