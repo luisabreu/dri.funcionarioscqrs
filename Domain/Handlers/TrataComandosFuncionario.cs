@@ -26,16 +26,33 @@ namespace Domain.Handlers {
             _verificadorTiposFuncionario = verificadorTiposFuncionario;
         }
 
-        public async Task Trata(CriaFuncionario comando) {
-            if (await _verificadorNif.NifDuplicado(comando.Nif, comando.Id)) {
+        private async Task VerificaDadosGerais(string nif, Guid id, int idTipoFuncionario) {
+            if (await _verificadorNif.NifDuplicado(nif, id))
+            {
                 throw new InvalidOperationException(Msg.Nif_duplicado);
             }
-            if (!_verificadorTiposFuncionario.TipoFuncionarioValido(comando.IdTipoFuncionario)) {
+            if (!_verificadorTiposFuncionario.TipoFuncionarioValido(idTipoFuncionario))
+            {
                 throw new InvalidOperationException(Msg.Tipo_funcionario_invalido);
             }
+        }
+
+        public async Task Trata(CriaFuncionario comando) {
+            await VerificaDadosGerais(comando.Nif, comando.Id, comando.IdTipoFuncionario);
 
             var funcionario = new Funcionario(comando);
             await _repositorio.Grava(funcionario, ExpectedVersion.NoStream);
+        }
+
+        public async Task Trata(ModificaDadosGeraisFuncionario comando) {
+            await VerificaDadosGerais(comando.Nif, comando.Id, comando.IdTipoFuncionario);
+
+            var funcionario = await _repositorio.Obtem(comando.Id);
+            if (funcionario == null) {
+                throw new InvalidOperationException(Msg.Funcionario_inexistente);
+            }
+            funcionario.ModificaDadosGerais(comando);
+            await _repositorio.Grava(funcionario, comando.Versao);
         }
 
         [ContractInvariantMethod]

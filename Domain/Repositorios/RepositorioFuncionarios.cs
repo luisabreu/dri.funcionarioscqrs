@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Threading.Tasks;
 using Domain.Agregados;
+using NHibernate.Util;
 
 namespace Domain.Repositorios {
     public class RepositorioFuncionarios : IRepositorioFuncionarios {
@@ -23,6 +24,9 @@ namespace Domain.Repositorios {
 
         public async Task<Funcionario> Obtem(Guid id) {
             var eventos = await _depositoEventos.ObtemEventosParaAgregado(id.ToString());
+            if (!eventos.Any()) {
+                return null;
+            }
             var funcionario = new Funcionario();
             funcionario.CarregaDeHistorico(eventos);
             return funcionario;

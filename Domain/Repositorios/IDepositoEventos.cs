@@ -20,6 +20,7 @@ namespace Domain.Repositorios {
 
         public Task<IEnumerable<IEvento>> ObtemEventosParaAgregado(string idStream, int versaoEsperada = 0) {
             Contract.Requires(!string.IsNullOrEmpty(idStream));
+            Contract.Ensures(Contract.Result<Task<IEnumerable<IEvento>>>() != null);
             return default(Task<IEnumerable<IEvento>>);
         }
     }

@@ -106,7 +106,16 @@ namespace Domain {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to O NIFintroduzido já foi associado a outro funcionário..
+        ///   Looks up a localized string similar to Não existe nenhum funcionário com o ID indicado..
+        /// </summary>
+        internal static string Funcionario_inexistente {
+            get {
+                return ResourceManager.GetString("Funcionario_inexistente", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O NIF introduzido já foi associado a outro funcionário..
         /// </summary>
         internal static string Nif_duplicado {
             get {

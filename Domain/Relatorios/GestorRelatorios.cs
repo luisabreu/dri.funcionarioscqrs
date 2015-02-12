@@ -30,7 +30,6 @@ namespace Domain.Relatorios {
         }
 
         public IEnumerable<ResumoFuncionario> Pesquisa(string nifOuNome) {
-            Contract.Requires(!string.IsNullOrEmpty(nifOuNome));
             const string sql =
                 "select Id, Nome, Nif, descricao as TipoFuncionario from Funcionarios f inner join TipoFuncinario tf on f.IdTipofuncionario=tf.Id where {0} like '%:str%";
             var items = _session.CreateSQLQuery(string.Format(sql, ENif(nifOuNome) ? " nif " : " nome "))

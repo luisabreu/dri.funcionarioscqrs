@@ -13,12 +13,10 @@ namespace Domain.Mensagens.Comandos {
             string nif,
             int idTipoFuncionario) {
             Contract.Requires(id != Guid.Empty);
-            Contract.Requires(versao > 0);
             Contract.Requires(!string.IsNullOrEmpty(nome));
             Contract.Requires(!string.IsNullOrEmpty(nif));
             Contract.Requires(idTipoFuncionario > 0);
             Contract.Ensures(Id != Guid.Empty);
-            Contract.Ensures(Versao > 0);
             Contract.Ensures(!string.IsNullOrEmpty(Nome));
             Contract.Ensures(!string.IsNullOrEmpty(Nif));
             Contract.Ensures(IdTipoFuncionario > 0);
@@ -40,7 +38,6 @@ namespace Domain.Mensagens.Comandos {
             Justification = "Required for code contracts.")]
         private void ObjectInvariant() {
             Contract.Invariant(Id != Guid.Empty);
-            Contract.Invariant(Versao > 0);
             Contract.Invariant(!string.IsNullOrEmpty(Nome));
             Contract.Invariant(!string.IsNullOrEmpty(Nif));
             Contract.Invariant(IdTipoFuncionario > 0);

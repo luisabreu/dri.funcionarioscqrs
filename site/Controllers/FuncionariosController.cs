@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Domain.Handlers;
 using Domain.Mensagens.Comandos;
@@ -63,11 +64,10 @@ namespace site.Controllers {
         }
 
         [HttpPost]
-        public ActionResult DadosGerais(Guid id, int versao, string nome, string nif, int tipoFuncionario) {
+        public async Task<ActionResult> DadosGerais(Guid id, int versao, string nome, string nif, int tipoFuncionario) {
             var criarNovoFuncionario = id == Guid.Empty && versao == 0;
             IEnumerable<TipoFuncionario> tipos = null;
             Funcionario funcionario = null;
-            MsgGravacao msg = null;
             var novo = true;
 
             using (var tran = _session.BeginTransaction()) {
@@ -78,13 +78,11 @@ namespace site.Controllers {
 
                     if (!criarNovoFuncionario) {
                         var comando = new ModificaDadosGeraisFuncionario(id, versao, nome, nif, tipo.IdTipoFuncionario);
-                        msg = _processador.Trata(comando);
+                        await _processador.Trata(comando);
                     }
                     else {
                         var comando = new CriaFuncionario(Guid.NewGuid(), nome, nif, tipo.IdTipoFuncionario);
-                        msg = _processador.Trata(comando);
-                        novo = !msg.GravadaComSucesso();
-                        id = msg.Id;
+                        await _processador.Trata(comando);
                     }
 
                     tran.Commit();

@@ -136,9 +136,12 @@
     <value>Alguns dos contactos a adicionar já foram associados ao funcionário.</value>
   </data>
   <data name="Nif_duplicado" xml:space="preserve">
-    <value>O NIFintroduzido já foi associado a outro funcionário.</value>
+    <value>O NIF introduzido já foi associado a outro funcionário.</value>
   </data>
   <data name="Tipo_funcionario_invalido" xml:space="preserve">
     <value>O tipo de funcionário indicado não é valido.</value>
+  </data>
+  <data name="Funcionario_inexistente" xml:space="preserve">
+    <value>Não existe nenhum funcionário com o ID indicado.</value>
   </data>
 </root>
