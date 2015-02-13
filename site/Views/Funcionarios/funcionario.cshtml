@@ -21,7 +21,7 @@
             <label for="nif" class="control-label col-xs-2">Tipo:</label>
             <div class="col-xs-4 more-space">
                 @Html.DropDownList("tipoFuncionario",
-                    new SelectList(Model.TiposFuncionario, "Id", "Descricao", Model.Funcionario.TipoFuncionario.Id),
+                    new SelectList(Model.TiposFuncionario, "IdTipoFuncionario", "Descricao", Model.Funcionario.TipoFuncionario.IdTipoFuncionario),
                     new { @class = "form-control" })
             </div>
         </div>

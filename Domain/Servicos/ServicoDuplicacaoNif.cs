@@ -4,6 +4,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Threading.Tasks;
 using EventStore.ClientAPI;
+using EventStore.ClientAPI.SystemData;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
@@ -30,12 +31,17 @@ namespace Domain.Servicos {
         }
 
         public async Task<bool> NifDuplicado(string nif, Guid id) {
-            var estado = await _gestor.GetStateAsync(_nomeProjecao);
-            if (!string.IsNullOrEmpty(estado)) {
-                estado = "{\"itens\":[] }";
+            string estado = "";
+            try {
+                estado = await _gestor.GetStateAsync(_nomeProjecao);
+            }
+            catch (Exception ex) {
+            }
+            if (string.IsNullOrEmpty(estado)) {
+                estado = "{\"ids\":[] }";
             }
             var lista = JsonConvert.DeserializeObject<Lista>(estado, _jsonSettings);
-            return lista.Itens != null && lista.Itens.Any(i => i.id == id && i.nif == nif);
+            return lista.ids != null && lista.ids.Any(i => i.id == id && i.nif == nif);
         }
 
         [ContractInvariantMethod]
@@ -50,7 +56,7 @@ namespace Domain.Servicos {
         }
 
         private class Lista {
-            public Info[] Itens;
+            public Info[] ids;
         }
     }
 }

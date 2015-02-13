@@ -8,7 +8,7 @@ namespace Domain.Relatorios {
             Not.LazyLoad();
             ReadOnly();
 
-            Id(f => f.IdTipoFuncionario)
+            Id(f => f.IdTipoFuncionario, "Id")
                 .GeneratedBy.Identity();
             Map(f => f.Descricao)
                 .Not.Nullable();

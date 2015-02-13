@@ -57,7 +57,7 @@ namespace Domain.Handlers.Eventos {
             lock (_locker) {
                 using (var session = _sessionFactory.OpenStatelessSession()) {
                     using (var tran = session.BeginTransaction()) {
-                        _posicaoStreamBd = session.Get<PosicaoStream>(_id);
+                        _posicaoStreamBd = session.Get<PosicaoStream>(_id) ?? new PosicaoStream();
                     }
                 }
             }
