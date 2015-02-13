@@ -104,6 +104,7 @@
     <Compile Include="Agregados\Funcionario.cs" />
     <Compile Include="Handlers\Comandos\TrataComandosFuncionario.cs" />
     <Compile Include="Handlers\Eventos\GestorSubscricoes.cs" />
+    <Compile Include="Handlers\Eventos\MapeamentoPosicaoStream.cs" />
     <Compile Include="Handlers\Eventos\PosicaoStream.cs" />
     <Compile Include="Handlers\Eventos\TrataEventosFuncionarios.cs" />
     <Compile Include="Mensagens\Comandos\CriaFuncionario.cs" />

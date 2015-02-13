@@ -9,7 +9,7 @@ namespace Domain.Relatorios {
                 ReadOnly();
 
                 Id(f => f.Id)
-                    .GeneratedBy.Identity();
+                    .GeneratedBy.Assigned();
                 Version(f => f.Versao);
                 Map(f => f.Nome)
                     .Not.Nullable();

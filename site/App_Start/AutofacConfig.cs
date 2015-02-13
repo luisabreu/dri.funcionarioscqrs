@@ -6,6 +6,7 @@ using Autofac;
 using Autofac.Integration.Mvc;
 using Domain.Relatorios;
 using EventStore.ClientAPI;
+using EventStore.ClientAPI.SystemData;
 using NHibernate;
 using GestorTransacoes = site.Models.Relatorios.GestorTransacoes;
 
@@ -40,10 +41,13 @@ namespace site.App_Start {
             builder.Register(c => EventStoreConnection.Create(new IPEndPoint(IPAddress.Loopback, ObtemPorta())))
                 .As<IEventStoreConnection>()
                 .SingleInstance();
+
+            builder.Register(c => new UserCredentials("admin", "changeit"))
+                .SingleInstance();
         }
 
         private static int ObtemPorta() {
-            var porta = ConfigurationManager.ConnectionStrings["tcpEventStorePort"].ConnectionString;
+            var porta = ConfigurationManager.AppSettings["tcpEventStorePort"];
             return int.Parse(porta);
         }
     }

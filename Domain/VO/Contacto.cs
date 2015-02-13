@@ -9,7 +9,9 @@ namespace Domain.VO {
         private static readonly Regex _verificadorNumTel = new Regex(@"^\d{9}$");
         private static readonly Regex _verificadorNumExtensao = new Regex(@"^\d{4}$");
 
-        public Contacto(TipoContacto tipoContacto, string valor) {
+        private Contacto() :this(TipoContacto.Telefone, "111111111"){
+        }
+        public Contacto(TipoContacto tipoContacto, string valor ) {
             Contract.Requires(!string.IsNullOrEmpty(valor));
             TipoContacto = tipoContacto;
             Valor = valor;
