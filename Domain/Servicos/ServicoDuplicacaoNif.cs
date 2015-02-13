@@ -31,17 +31,12 @@ namespace Domain.Servicos {
         }
 
         public async Task<bool> NifDuplicado(string nif, Guid id) {
-            string estado = "";
-            try {
-                estado = await _gestor.GetStateAsync(_nomeProjecao);
-            }
-            catch (Exception ex) {
-            }
+            string estado = await _gestor.GetStateAsync(_nomeProjecao);
             if (string.IsNullOrEmpty(estado)) {
                 estado = "{\"ids\":[] }";
             }
             var lista = JsonConvert.DeserializeObject<Lista>(estado, _jsonSettings);
-            return lista.ids != null && lista.ids.Any(i => i.id == id && i.nif == nif);
+            return lista.ids != null && lista.ids.Length > 0 && lista.ids.Any(i => i.id == id && i.nif == nif);
         }
 
         [ContractInvariantMethod]

@@ -53,13 +53,18 @@ namespace Domain.Repositorios {
             if (versaoEsperada < 0) {
                 return eventos;
             }
-            var indiceProxPaginaElementos = versaoEsperada;
-            StreamEventsSlice paginaElementos = null;
-            do {
-                paginaElementos = await _ligacaoDeposito.ReadStreamEventsForwardAsync(idStream, indiceProxPaginaElementos, _numeroEventosPorPagina, false);
-                eventos.AddRange(paginaElementos.Events.Select(_seriadorEventos.DeseriaEvento));
-                indiceProxPaginaElementos = paginaElementos.NextEventNumber;
-            } while (!paginaElementos.IsEndOfStream);
+            try {
+                var indiceProxPaginaElementos = versaoEsperada;
+                StreamEventsSlice paginaElementos = null;
+                do {
+                    paginaElementos = await _ligacaoDeposito.ReadStreamEventsForwardAsync(idStream, indiceProxPaginaElementos, _numeroEventosPorPagina, false);
+                    eventos.AddRange(paginaElementos.Events.Select(_seriadorEventos.DeseriaEvento));
+                    indiceProxPaginaElementos = paginaElementos.NextEventNumber;
+                } while (!paginaElementos.IsEndOfStream);
+            }
+            catch (Exception ex) {
+                var t = "";
+            }
             return eventos;
         }
 

@@ -26,17 +26,6 @@ namespace Domain.Handlers.Comandos {
             _verificadorTiposFuncionario = verificadorTiposFuncionario;
         }
 
-        private async Task VerificaDadosGerais(string nif, Guid id, int idTipoFuncionario) {
-            if (await _verificadorNif.NifDuplicado(nif, id))
-            {
-                throw new InvalidOperationException(Msg.Nif_duplicado);
-            }
-            if (!_verificadorTiposFuncionario.TipoFuncionarioValido(idTipoFuncionario))
-            {
-                throw new InvalidOperationException(Msg.Tipo_funcionario_invalido);
-            }
-        }
-
         public async Task Trata(CriaFuncionario comando) {
             await VerificaDadosGerais(comando.Nif, comando.Id, comando.IdTipoFuncionario);
 
@@ -64,6 +53,14 @@ namespace Domain.Handlers.Comandos {
             await _repositorio.Grava(funcionario, comando.Versao);
         }
 
+        private async Task VerificaDadosGerais(string nif, Guid id, int idTipoFuncionario) {
+            if (await _verificadorNif.NifDuplicado(nif, id)) {
+                throw new InvalidOperationException(Msg.Nif_duplicado);
+            }
+            if (!_verificadorTiposFuncionario.TipoFuncionarioValido(idTipoFuncionario)) {
+                throw new InvalidOperationException(Msg.Tipo_funcionario_invalido);
+            }
+        }
 
         [ContractInvariantMethod]
         [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Required for code contracts.")]

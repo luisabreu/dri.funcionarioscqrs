@@ -40,19 +40,24 @@ namespace site.App_Start {
                 .As<ISession>()
                 .InstancePerRequest();
 
-            builder.Register(c => EventStoreConnection.Create(new IPEndPoint(IPAddress.Loopback, ObtemPorta())))
+            builder.Register(c => EventStoreConnection.Create(new IPEndPoint(IPAddress.Loopback, ObtemPortaTcp())))
                 .As<IEventStoreConnection>()
                 .SingleInstance();
 
-            builder.Register(c => new ProjectionsManager(new ConsoleLogger(), new IPEndPoint(IPAddress.Loopback, ObtemPorta()), TimeSpan.FromSeconds(60)))
+            builder.Register(c => new ProjectionsManager(new ConsoleLogger(), new IPEndPoint(IPAddress.Loopback, ObtemPortaHttp()), TimeSpan.FromSeconds(60)))
                 .SingleInstance();
 
             builder.Register(c => new UserCredentials("admin", "changeit"))
                 .SingleInstance();
         }
 
-        private static int ObtemPorta() {
+        private static int ObtemPortaTcp() {
             var porta = ConfigurationManager.AppSettings["tcpEventStorePort"];
+            return int.Parse(porta);
+        }
+        
+        private static int ObtemPortaHttp() {
+            var porta = ConfigurationManager.AppSettings["httpEventStorePort"];
             return int.Parse(porta);
         }
     }
