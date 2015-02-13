@@ -21,14 +21,22 @@ namespace Domain.Repositorios {
             _seriadorEventos = seriadorEventos;
         }
 
-        public async Task GravaEventos(string idStream, string tipo, IEnumerable<IEvento> eventosGravar, int versaoEsperada) {
-            var eventosPreviamenteGravadosEmConflitoEventual = await ObtemEventosParaAgregado(idStream, versaoEsperada + 1);
+        public async Task GravaEventos(string idStream, string tipo, IEnumerable<IEvento> eventosGravar,
+            int versaoEsperada) {
+            var eventosPreviamenteGravadosEmConflitoEventual =
+                await ObtemEventosParaAgregado(idStream, versaoEsperada + 1);
 
-            if (eventosGravar.Any(eventoGravar => eventosPreviamenteGravadosEmConflitoEventual.Any(eventoGravado => ExisteConflitoEventos(eventoGravar, eventoGravado)))) {
+            if (
+                eventosGravar.Any(
+                    eventoGravar =>
+                        eventosPreviamenteGravadosEmConflitoEventual.Any(
+                            eventoGravado => ExisteConflitoEventos(eventoGravar, eventoGravado)))) {
                 throw new ConcurrencyException();
             }
             //update event number
-            var evtVersionNumber = eventosPreviamenteGravadosEmConflitoEventual.Any() ? eventosPreviamenteGravadosEmConflitoEventual.Max(evt => evt.Versao) : versaoEsperada;
+            var evtVersionNumber = eventosPreviamenteGravadosEmConflitoEventual.Any()
+                ? eventosPreviamenteGravadosEmConflitoEventual.Max(evt => evt.Versao)
+                : versaoEsperada;
             /*foreach (var evento in eventosGravar) {
                 evento.Versao = ++evtVersionNumber;
             }*/
@@ -48,23 +56,23 @@ namespace Domain.Repositorios {
             }
         }
 
-        public async Task<IEnumerable<IEvento>> ObtemEventosParaAgregado(string idStream, int versaoEsperada = StreamPosition.Start) {
+        public async Task<IEnumerable<IEvento>> ObtemEventosParaAgregado(string idStream,
+            int versaoEsperada = StreamPosition.Start) {
             var eventos = new List<IEvento>();
             if (versaoEsperada < 0) {
                 return eventos;
             }
-            try {
-                var indiceProxPaginaElementos = versaoEsperada;
-                StreamEventsSlice paginaElementos = null;
-                do {
-                    paginaElementos = await _ligacaoDeposito.ReadStreamEventsForwardAsync(idStream, indiceProxPaginaElementos, _numeroEventosPorPagina, false);
-                    eventos.AddRange(paginaElementos.Events.Select(_seriadorEventos.DeseriaEvento));
-                    indiceProxPaginaElementos = paginaElementos.NextEventNumber;
-                } while (!paginaElementos.IsEndOfStream);
-            }
-            catch (Exception ex) {
-                var t = "";
-            }
+            var indiceProxPaginaElementos = versaoEsperada;
+            StreamEventsSlice paginaElementos = null;
+            do {
+                paginaElementos =
+                    await
+                        _ligacaoDeposito.ReadStreamEventsForwardAsync(idStream, indiceProxPaginaElementos,
+                            _numeroEventosPorPagina, false);
+                eventos.AddRange(paginaElementos.Events.Select(_seriadorEventos.DeseriaEvento));
+                indiceProxPaginaElementos = paginaElementos.NextEventNumber;
+            } while (!paginaElementos.IsEndOfStream);
+
             return eventos;
         }
 

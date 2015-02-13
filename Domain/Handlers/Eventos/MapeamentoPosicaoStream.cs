@@ -7,11 +7,10 @@ namespace Domain.Handlers.Eventos {
                 public MapeamentoFuncionarioDto() {
                     Table("PosicaoStream");
                     Not.LazyLoad();
-                    ReadOnly();
 
                     Id(f => f.IdPosicaoStream)
                         .GeneratedBy.Identity();
-                    Version(f => f.Versao);
+                   
                     Map(f => f.PosicaoCommit)
                         .Not.Nullable();
                     Map(f => f.PosicaoPreparacao)

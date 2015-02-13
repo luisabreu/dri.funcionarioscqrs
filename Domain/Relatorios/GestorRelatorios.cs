@@ -30,10 +30,14 @@ namespace Domain.Relatorios {
         }
 
         public IEnumerable<ResumoFuncionario> Pesquisa(string nifOuNome) {
-            const string sql =
-                "select Id, Nome, Nif, descricao as TipoFuncionario from Funcionarios f inner join TipoFuncinario tf on f.IdTipofuncionario=tf.Id where {0} like '%:str%";
-            var items = _session.CreateSQLQuery(string.Format(sql, ENif(nifOuNome) ? " nif " : " nome "))
-                .SetString("str", nifOuNome.Replace(' ', '%'))
+            const string sqlBase =
+                @"select f.Id, Nome, Nif, descricao as TipoFuncionario from Funcionarios f 
+                        inner join TipoFuncionario tf 
+                        on f.IdTipofuncionario=tf.Id 
+                        where {0} like :str";
+            var sql = string.Format(sqlBase, ENif(nifOuNome) ? " nif " : " nome ");
+            var items = _session.CreateSQLQuery(sql)
+                .SetString("str", "%" + nifOuNome.Replace(' ', '%') + "%")
                 .SetResultTransformer(Transformers.AliasToBean<ResumoFuncionario>())
                 .List<ResumoFuncionario>();
             return items;

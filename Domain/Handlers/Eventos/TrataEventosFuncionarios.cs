@@ -30,7 +30,7 @@ namespace Domain.Handlers.Eventos {
             funcionario.Nif = evento.Nif;
             funcionario.TipoFuncionario = session.Load<TipoFuncionario>(evento.IdTipoFuncionario);
             funcionario.Versao = evento.Versao;
-            session.Update(funcionario);
+            session.SaveOrUpdate(funcionario);
         }
 
         public static void Trata(ContactosFuncionarioModificados evento, ISession session) {
@@ -40,7 +40,7 @@ namespace Domain.Handlers.Eventos {
             funcionario.Contactos = funcionario.Contactos.Where(c => !evento.ContactosRemover.Contains(c)).ToList();
             funcionario.Contactos = funcionario.Contactos.Union(evento.ContactosAdicionar).ToList();
             funcionario.Versao = evento.Versao;
-            session.Update(funcionario);
+            session.Save(funcionario);
         }
 
     }

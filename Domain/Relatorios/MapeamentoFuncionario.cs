@@ -6,14 +6,15 @@ namespace Domain.Relatorios {
             public MapeamentoFuncionarioDto() {
                 Table("Funcionarios");
                 Not.LazyLoad();
-                ReadOnly();
 
                 Id(f => f.Id)
                     .GeneratedBy.Assigned();
-                Version(f => f.Versao);
+             
                 Map(f => f.Nome)
                     .Not.Nullable();
                 Map(f => f.Nif)
+                    .Not.Nullable();
+                Map(f => f.Versao)
                     .Not.Nullable();
 
                 HasMany(f => f.Contactos)

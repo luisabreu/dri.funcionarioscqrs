@@ -87,7 +87,7 @@ namespace Domain.Handlers.Eventos {
 
         public void CancelaSubscricao() {
             lock (_locker) {
-                _subscricao.Stop(TimeSpan.FromMilliseconds(50));
+                _subscricao.Stop(TimeSpan.FromMilliseconds(5000));
             }
         }
 
@@ -103,8 +103,7 @@ namespace Domain.Handlers.Eventos {
                         if (!evento.OriginalEvent.EventType.StartsWith("$") &&
                             !evento.OriginalStreamId.StartsWith("$")) {
                             var eventoDeseriado = _seriadorEventos.DeseriaEvento(evento);
-                            eventoDeseriado.Versao = evento.OriginalEventNumber;
-                            _subscritores[evento.GetType()](eventoDeseriado, session);
+                            _subscritores[eventoDeseriado.GetType()](eventoDeseriado, session);
                         }
                     }
                     catch (Exception ex) {

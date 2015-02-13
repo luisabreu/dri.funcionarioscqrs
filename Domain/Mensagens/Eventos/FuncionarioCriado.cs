@@ -12,18 +12,18 @@ namespace Domain.Mensagens.Eventos {
         public readonly string Nif;
         public readonly string Nome;
 
-        public FuncionarioCriado(Guid idFuncionario,
+        public FuncionarioCriado(Guid id,
             string nome,
             string nif,
             int idTipoFuncionario,
             IEnumerable<Contacto> contactos = null) {
-            Contract.Requires(idFuncionario != null);
+            Contract.Requires(id != null);
             Contract.Requires(!string.IsNullOrEmpty(nome));
             Contract.Requires(!string.IsNullOrEmpty(nif));
             Contract.Ensures(!string.IsNullOrEmpty(Nome));
             Contract.Ensures(Contactos != null);
             Contract.Ensures(!string.IsNullOrEmpty(Nif));
-            Id = idFuncionario;
+                Id = id;
             Nome = nome;
             Nif = nif;
             IdTipoFuncionario = idTipoFuncionario;

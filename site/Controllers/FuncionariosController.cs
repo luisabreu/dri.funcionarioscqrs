@@ -138,7 +138,7 @@ namespace site.Controllers {
                     tipos = _session.QueryOver<TipoFuncionario>().List<TipoFuncionario>();
                     contactoEliminado = Contacto.Parses(contacto);
                     Contract.Assert(contactoEliminado != null, Msg.Contacto_invalido);
-                    var cmd = new ModificaContactosFuncionario(id, versao, new[] {contactoEliminado});
+                    var cmd = new ModificaContactosFuncionario(id, versao, null, new[] {contactoEliminado});
 
                     await _processador.Trata(cmd);
                 }
@@ -164,7 +164,7 @@ namespace site.Controllers {
                     tipos = _session.QueryOver<TipoFuncionario>().List<TipoFuncionario>();
                     contactoAdicionar = Contacto.Parses(contacto);
                     Contract.Assert(contactoAdicionar != null, Msg.Contacto_invalido);
-                    var cmd = new ModificaContactosFuncionario(id, versao, null, new[] {contactoAdicionar});
+                    var cmd = new ModificaContactosFuncionario(id, versao, new[] {contactoAdicionar});
 
                     await _processador.Trata(cmd);
                     tran.Commit();
