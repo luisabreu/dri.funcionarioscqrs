@@ -1,15 +1,19 @@
-﻿using System.Reflection;
+﻿using System.Configuration;
+using System.Net;
+using System.Reflection;
 using System.Web.Mvc;
 using Autofac;
 using Autofac.Integration.Mvc;
 using Domain.Relatorios;
+using EventStore.ClientAPI;
 using NHibernate;
+using GestorTransacoes = site.Models.Relatorios.GestorTransacoes;
 
 namespace site.App_Start {
     public class AutofacConfig {
-        private static ISessionFactory _fabricaSessoes = new site.Models.Relatorios.GestorTransacoes().ObtemFabricaSessoes();
+        private static ISessionFactory _fabricaSessoes = new GestorTransacoes().ObtemFabricaSessoes();
 
-        public static void RegisterForMvc() {
+        public static IContainer RegisterForMvc() {
             var builder = new ContainerBuilder();
 
             builder.RegisterControllers(Assembly.GetExecutingAssembly());
@@ -19,8 +23,10 @@ namespace site.App_Start {
                 .AsSelf();
 
             OverrideDependencyRegistration(builder);
-
-            DependencyResolver.SetResolver(new AutofacDependencyResolver(builder.Build()));
+            
+            var container = builder.Build();
+            DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
+            return container;
         }
 
         private static void OverrideDependencyRegistration(ContainerBuilder builder) {
@@ -30,6 +36,15 @@ namespace site.App_Start {
             builder.Register(c => _fabricaSessoes.OpenSession())
                 .As<ISession>()
                 .InstancePerRequest();
+
+            builder.Register(c => EventStoreConnection.Create(new IPEndPoint(IPAddress.Loopback, ObtemPorta())))
+                .As<IEventStoreConnection>()
+                .SingleInstance();
+        }
+
+        private static int ObtemPorta() {
+            var porta = ConfigurationManager.ConnectionStrings["tcpEventStorePort"].ConnectionString;
+            return int.Parse(porta);
         }
     }
 }
