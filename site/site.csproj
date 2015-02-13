@@ -179,6 +179,7 @@
     <Compile Include="Models\DadosGerais.cs" />
     <Compile Include="Models\DadosPesquisa.cs" />
     <Compile Include="Models\NovoFuncionario.cs" />
+    <Compile Include="Models\Relatorios\GestorTransacoes.cs" />
     <Compile Include="Msg.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
