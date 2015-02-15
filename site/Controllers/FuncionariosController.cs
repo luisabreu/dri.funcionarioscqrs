@@ -69,7 +69,7 @@ namespace site.Controllers {
             var criarNovoFuncionario = id == Guid.Empty && versao == 0;
             IEnumerable<TipoFuncionario> tipos = null;
             Funcionario funcionario = null;
-            var novo = true;
+            var ocorreuExcecao = false;
 
             using (var tran = _session.BeginTransaction()) {
                 try {
@@ -82,26 +82,36 @@ namespace site.Controllers {
                         await _processador.Trata(comando);
                     }
                     else {
-                        var comando = new CriaFuncionario(Guid.NewGuid(), nome, nif, tipo.IdTipoFuncionario);
+                        id = Guid.NewGuid();
+                        var comando = new CriaFuncionario(id, nome, nif, tipo.IdTipoFuncionario);
                         await _processador.Trata(comando);
                     }
                 }
                 catch (Exception ex) {
-                    novo = false;
+                    ocorreuExcecao = true;
                     ModelState.AddModelError("total", ex.Message);
                 }
             }
 
             return View("Funcionario", new DadosFormularioFuncionario {
-                Funcionario = !criarNovoFuncionario || !novo ? ObtemFuncionarioComDadosGeraisAtualizados(id, versao + 1, nome, nif, tipos.First(i => i.IdTipoFuncionario == tipoFuncionario)) : CriaFuncionarioDtoVazio(tipos.First()),
-                                                                          Novo = criarNovoFuncionario && novo,
-                                                                          TiposFuncionario = tipos
-                                                                      });
-        }
+                Funcionario = !criarNovoFuncionario || !ocorreuExcecao ? 
+                            ObtemFuncionarioComDadosGeraisAtualizados(id, ocorreuExcecao || criarNovoFuncionario ? versao : versao + 1, nome, nif, tipos.First(i => i.IdTipoFuncionario == tipoFuncionario)) 
+                            : CriaFuncionarioDtoVazio(tipos.First()),
+                            Novo = criarNovoFuncionario && ocorreuExcecao,
+                            TiposFuncionario = tipos
+                      });
+        }   
 
-        private Funcionario ObtemFuncionarioComDadosGeraisAtualizados(Guid id, int versaoEsperada, string nome, string nif, TipoFuncionario tipoFuncionario) {
-            var funcionario = _gestorRelatorios.Obtem(id);
-            Contract.Assert(funcionario != null);
+        private Funcionario ObtemFuncionarioComDadosGeraisAtualizados(
+            Guid id, int versaoEsperada, string nome, string nif, TipoFuncionario tipoFuncionario) {
+            Funcionario funcionario = null;
+            try {
+                funcionario = _gestorRelatorios.Obtem(id);
+            }
+            catch (ObjectNotFoundException ex) {
+                funcionario = CriaFuncionarioDtoVazio(tipoFuncionario);
+                funcionario.Id = id;
+            }
             funcionario.Nome = nome;
             funcionario.Nif = nif;
             funcionario.Versao = versaoEsperada;

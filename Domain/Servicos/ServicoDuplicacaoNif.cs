@@ -21,7 +21,7 @@ namespace Domain.Servicos {
             Converters = new JsonConverter[] { new StringEnumConverter() }
         };
 
-        private const string _nomeProjecao = "nifs";
+        private const string _nomeProjecao = "nifsdirecoes";
         private readonly ProjectionsManager _gestor;
 
         public ServicoDuplicacaoNif(ProjectionsManager gestor) {
@@ -35,8 +35,15 @@ namespace Domain.Servicos {
             if (string.IsNullOrEmpty(estado)) {
                 estado = "{\"ids\":[] }";
             }
-            var lista = JsonConvert.DeserializeObject<Lista>(estado, _jsonSettings);
-            return lista.ids != null && lista.ids.Length > 0 && lista.ids.Any(i => i.id != id && i.nif == nif);
+            var existe = false;
+            try {
+                var lista = JsonConvert.DeserializeObject<Lista>(estado, _jsonSettings);
+                existe =  lista.ids != null && lista.ids.Length > 0 && lista.ids.Any(i => i.id != id && i.nif == nif);
+            }
+            catch (Exception ex) {
+                var t = "";
+            }
+            return existe;
         }
 
         [ContractInvariantMethod]
