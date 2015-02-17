@@ -1,13 +1,12 @@
-﻿//nifs
-fromAll()
+﻿fromAll()
 .when({
     $init: function(){
         return {ids: []};
     },
     funcionariocriado:function(state, event){
-        state.ids.push({id: event.body.Id, nif: event.body.Nif});
+        state.ids.push({id: event.data.id, nif: event.data.nif});
     },
     dadosgeraisfuncionariomodificados:function(state, event){
-        state.ids.push({id: event.body.Id, nif: event.body.Nif});
+        state.ids.push({id: event.data.id, nif: event.data.nif});
     }
 })

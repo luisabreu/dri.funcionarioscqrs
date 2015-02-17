@@ -224,6 +224,7 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <None Include="start-eventStore.ps1" />
     <Content Include="Views\Funcionarios\funcionario.cshtml" />
+    <Content Include="Views\Funcionarios\funcionariocriado.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Msg.resx" />

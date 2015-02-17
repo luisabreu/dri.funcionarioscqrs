@@ -21,7 +21,7 @@ namespace Domain.Servicos {
             Converters = new JsonConverter[] { new StringEnumConverter() }
         };
 
-        private const string _nomeProjecao = "nifsdirecoes";
+        private const string _nomeProjecao = "nifs";
         private readonly ProjectionsManager _gestor;
 
         public ServicoDuplicacaoNif(ProjectionsManager gestor) {

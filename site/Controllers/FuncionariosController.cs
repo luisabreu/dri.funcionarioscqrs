@@ -37,6 +37,7 @@ namespace site.Controllers {
 
         public ActionResult Pesquisa(string nifOuNome) {
             Contract.Requires(!string.IsNullOrEmpty(nifOuNome), Msg.String_vazia);
+           
             using (var tran = _session.BeginTransaction()) {
                 var funcionarios = _gestorRelatorios.Pesquisa(nifOuNome);
                 return View("Index", new DadosPesquisa {NifOuNome = nifOuNome, Funcionarios = funcionarios, PesquisaEfetuada = true});
@@ -68,13 +69,14 @@ namespace site.Controllers {
         public async Task<ActionResult> DadosGerais(Guid id, int versao, string nome, string nif, int tipoFuncionario) {
             var criarNovoFuncionario = id == Guid.Empty && versao == 0;
             IEnumerable<TipoFuncionario> tipos = null;
+            TipoFuncionario tipo = null;
             Funcionario funcionario = null;
             var ocorreuExcecao = false;
 
             using (var tran = _session.BeginTransaction()) {
                 try {
                     tipos = _session.QueryOver<TipoFuncionario>().List<TipoFuncionario>();
-                    var tipo = tipos.FirstOrDefault(t => t.IdTipoFuncionario == tipoFuncionario);
+                    tipo = tipos.FirstOrDefault(t => t.IdTipoFuncionario == tipoFuncionario);
                     Contract.Assert(tipo != null, Msg.Tipo_funcionario_inexistente);
 
                     if (!criarNovoFuncionario) {
@@ -93,13 +95,19 @@ namespace site.Controllers {
                 }
             }
 
-            return View("Funcionario", new DadosFormularioFuncionario {
-                Funcionario = !criarNovoFuncionario || !ocorreuExcecao ? 
-                            ObtemFuncionarioComDadosGeraisAtualizados(id, ocorreuExcecao || criarNovoFuncionario ? versao : versao + 1, nome, nif, tipos.First(i => i.IdTipoFuncionario == tipoFuncionario)) 
-                            : CriaFuncionarioDtoVazio(tipos.First()),
-                            Novo = criarNovoFuncionario && ocorreuExcecao,
-                            TiposFuncionario = tipos
-                      });
+            if (!ocorreuExcecao) {
+                var url = Url.Action("Funcionario", "Funcionarios", new { id = Guid.NewGuid().ToString() });
+                return View("funcionariocriado", (object)url);
+            }
+            funcionario = criarNovoFuncionario ? new Funcionario(){ Contactos = new List<Contacto>()} : _session.Load<Funcionario>(id);
+            funcionario.Nome = nome;
+            funcionario.Nif = nif;
+            funcionario.TipoFuncionario = tipo;
+            return View("funcionario", new DadosFormularioFuncionario {
+                Funcionario = funcionario,
+                Novo = criarNovoFuncionario,
+                TiposFuncionario = tipos
+            });
         }   
 
         private Funcionario ObtemFuncionarioComDadosGeraisAtualizados(

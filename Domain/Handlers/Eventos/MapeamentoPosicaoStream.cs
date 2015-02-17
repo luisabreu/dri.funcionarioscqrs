@@ -9,7 +9,7 @@ namespace Domain.Handlers.Eventos {
                     Not.LazyLoad();
 
                     Id(f => f.IdPosicaoStream)
-                        .GeneratedBy.Identity();
+                        .GeneratedBy.Assigned();
                    
                     Map(f => f.PosicaoCommit)
                         .Not.Nullable();
